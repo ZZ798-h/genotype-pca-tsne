@@ -22,3 +22,18 @@ print("Panel exists:", os.path.exists(panel_filename)) # Check if the panel file
 genotypes = [] # List to store genotype data for each sample
 samples = [] # List to store sample names
 variant_ids = [] # List to store variant identifiers
+
+with VariantFile(vcf_filename) as vcf_reader: # Open the VCF file for reading， using pysam's VariantFile which provides an interface to read VCF files
+    counter = 0 # Initialize a counter to keep track of the number of records processed, useful for progress tracking and debugging
+    for record in vcf_reader: # Iterate through each record (variant) in the VCF file, where 'record' is an object representing a single variant and its associated data
+        counter += 1 # Increment the counter for each record processed
+        if counter % 100 == 0: # Print progress every 100 records, useful for long-running processes to monitor progress
+            alleles = [record.samples[x]["GT"] for x in record.samples] # Extract the genotype information for each sample at the current variant, where 'alleles_indices' gives the indices of the alleles present in the sample for that variant
+            samples = [sample for sample in record.samples] # Update the list of sample names based on the current record, ensuring that we have the correct sample names corresponding to the genotype data being extracted
+            genotypes.append(alleles) # Append the extracted genotype information to the 'genotypes' list, which will be used later for analysis and matrix construction
+            variant_ids.append(record.id) # Append the identifier of the current variant to the 'variant_ids' list, which will be used for reference and analysis purposes
+        if counter % 4943 == 0: # Print progress every 4943 records, which is approximately every 1% of the total records (494328), providing a more granular progress update for long-running processes
+            print(counter) # Print the current count of records processed, useful for monitoring progress and debugging
+            print(f'{round(100 * counter / 494328)}%') # Print the percentage of records processed, calculated as (counter / total_records) * 100, providing a clear indication of how much of the VCF file has been processed at this point in time
+        # if counter > 1000: # Limit to first 1000 variants for testing
+        #     break
