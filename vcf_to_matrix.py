@@ -28,7 +28,7 @@ with VariantFile(vcf_filename) as vcf_reader: # Open the VCF file for reading，
     for record in vcf_reader: # Iterate through each record (variant) in the VCF file, where 'record' is an object representing a single variant and its associated data
         counter += 1 # Increment the counter for each record processed
         if counter % 100 == 0: # Print progress every 100 records, useful for long-running processes to monitor progress
-            alleles = [record.samples[x]["GT"] for x in record.samples] # Extract the genotype information for each sample at the current variant, where 'alleles_indices' gives the indices of the alleles present in the sample for that variant
+            alleles = [record.samples[x]["GT"] for x in record.samples] # Extract the genotype information (GT field) for each sample in the current record, creating a list of genotypes corresponding to each sample for this variant
             samples = [sample for sample in record.samples] # Update the list of sample names based on the current record, ensuring that we have the correct sample names corresponding to the genotype data being extracted
             genotypes.append(alleles) # Append the extracted genotype information to the 'genotypes' list, which will be used later for analysis and matrix construction
             variant_ids.append(record.id) # Append the identifier of the current variant to the 'variant_ids' list, which will be used for reference and analysis purposes
@@ -37,3 +37,11 @@ with VariantFile(vcf_filename) as vcf_reader: # Open the VCF file for reading，
             print(f'{round(100 * counter / 494328)}%') # Print the percentage of records processed, calculated as (counter / total_records) * 100, providing a clear indication of how much of the VCF file has been processed at this point in time
         # if counter > 1000: # Limit to first 1000 variants for testing
         #     break
+
+with open(panel_filename) as panel_file: # Open the panel file for reading, which contains information about the samples and their population groups
+    labels = {} # {sample_id: population_code} Dictionary to store the mapping of sample IDs to their corresponding population codes, which will be used for labeling and analysis
+    for line in panel_file:
+        line = line.strip().split('\t') # Split each line of the panel file by tab characters, which is the expected format of the panel file, to extract the relevant fields
+        labels[line[0]] = line[1] # Map the sample ID (first field) to the population code (second field) in the 'labels' dictionary, creating a reference for labeling samples based on their population groups for later analysis and visualization
+
+    
