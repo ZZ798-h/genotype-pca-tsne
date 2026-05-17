@@ -44,4 +44,6 @@ with open(panel_filename) as panel_file: # Open the panel file for reading, whic
         line = line.strip().split('\t') # Split each line of the panel file by tab characters, which is the expected format of the panel file, to extract the relevant fields
         labels[line[0]] = line[1] # Map the sample ID (first field) to the population code (second field) in the 'labels' dictionary, creating a reference for labeling samples based on their population groups for later analysis and visualization
 
-    
+print(variant_ids)
+genotypes = np.array(genotypes) # Convert the list of genotypes into a NumPy array for easier manipulation and analysis, allowing for efficient numerical operations and matrix manipulations
+print(genotypes.shape) # Print the shape of the genotypes array to verify its dimensions, which should correspond to (number of variants, number of samples) based on how the data was collected
