@@ -52,3 +52,7 @@ matrix = np.count_nonzero(genotypes, axis=2) # Count the number of non-zero entr
 
 matrix = matrix.T # Transpose the matrix to have samples as rows and variants as columns, which is a common format for downstream analysis such as PCA and t-SNE, where each row corresponds to a sample and each column corresponds to a variant, allowing for easier interpretation and analysis of the data
 print(matrix.shape) # Print the shape of the transposed matrix to verify its dimensions, which should now correspond to (number of samples, number of variants) based on the transposition performed in the previous step
+
+matrix =np.count_nonzero(genotypes, axis = 2) # Count the number of non-zero entries in the genotypes array along the last axis (which corresponds to the alleles), effectively counting the number of alternate alleles for each sample and variant, resulting in a matrix of shape (number of variants, number of samples) where each entry represents the count of alternate alleles for that sample and variant
+matrix = matrix.T # Transpose the matrix to have samples as rows and variants as columns,
+print(matrix.shaple) # Print the shape of the transposed matrix to verify its dimensions, which should now correspond to (number of samples, number of variants) based on the transposition performed in the previous step
